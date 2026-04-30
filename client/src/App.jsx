@@ -5,11 +5,24 @@ import CheckoutForm from './components/CheckoutForm';
 import AddBookForm from './components/AddBookForm';
 import './App.css';
 
+const VIEWS = {
+  DASHBOARD:   'dashboard',
+  AVAILABLE:   'available',
+  CHECKED_OUT: 'checked-out',
+  ADD_BOOK:    'add-book',
+};
+
+function formatDate() {
+  return new Date().toLocaleDateString('en-US', {
+    weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
+  });
+}
+
 export default function App() {
-  const [selectedId, setSelectedId] = useState(null);
+  const [view, setView]               = useState(VIEWS.AVAILABLE);
+  const [selectedId, setSelectedId]   = useState(null);
   const [checkoutBook, setCheckoutBook] = useState(null);
-  const [showAddForm, setShowAddForm] = useState(false);
-  const [refresh, setRefresh] = useState(0);
+  const [refresh, setRefresh]         = useState(0);
   const [globalFeedback, setGlobalFeedback] = useState('');
 
   const triggerRefresh = () => setRefresh(r => r + 1);
@@ -21,46 +34,110 @@ export default function App() {
   };
 
   const handleAddDone = (msg) => {
-    setShowAddForm(false);
+    setView(VIEWS.AVAILABLE);
     setGlobalFeedback(msg);
     triggerRefresh();
   };
 
   const handleDelete = () => {
     setSelectedId(null);
-    setGlobalFeedback('Book deleted.');
+    setGlobalFeedback('The book record has been permanently removed.');
     triggerRefresh();
   };
+
+  const navItems = [
+    { id: VIEWS.AVAILABLE,   label: 'Available Books',    icon: 'o' },
+    { id: VIEWS.CHECKED_OUT, label: 'Checked Out Books',  icon: 'x' },
+  ];
+
+  const pageHeadings = {
+    [VIEWS.AVAILABLE]:   { title: 'Available Books',       desc: 'Books currently available for checkout.' },
+    [VIEWS.CHECKED_OUT]: { title: 'Checked Out Books',     desc: 'Books currently on loan to borrowers.' },
+    [VIEWS.ADD_BOOK]:    { title: 'Add New Book',          desc: 'Enter the details of a new book to add to the collection.' },
+  };
+
+  const heading = pageHeadings[view];
 
   return (
     <div className="app">
       <header className="app-header">
-        <div>
-          <h1>Library Books</h1>
-          <span>CS3320 Capstone Project</span>
+        <div className="header-left">
+          <span className="header-icon" role="img" aria-label="library">
+            &#128218;
+          </span>
+          <div className="header-title">
+            <h1>City Library Management System</h1>
+            <div className="subtitle">Collection and Circulation Module</div>
+          </div>
         </div>
-        <button className="btn-add" onClick={() => setShowAddForm(true)}>
-          + Add Book
-        </button>
+        <div className="header-date">{formatDate()}</div>
       </header>
 
-      <main className="main-content">
-        {globalFeedback && (
-          <div className="global-feedback" onClick={() => setGlobalFeedback('')}>
-            {globalFeedback}
-          </div>
-        )}
+      <div className="app-body">
+        <nav className="sidebar">
+          <div className="sidebar-section-label">Navigation</div>
+          <ul className="sidebar-nav">
+            {navItems.map(item => (
+              <li key={item.id}>
+                <button
+                  className={view === item.id ? 'active' : ''}
+                  onClick={() => setView(item.id)}
+                >
+                  <span className="sidebar-icon">{item.icon}</span>
+                  {item.label}
+                </button>
+              </li>
+            ))}
+          </ul>
+          <hr className="sidebar-divider" />
+          <div className="sidebar-section-label">Catalog</div>
+          <button
+            className="sidebar-add-btn"
+            onClick={() => setView(VIEWS.ADD_BOOK)}
+          >
+            + Add New Book
+          </button>
+        </nav>
 
-        <BookList
-          onSelect={setSelectedId}
-          onCheckIn={triggerRefresh}
-          onCheckOut={setCheckoutBook}
-          refresh={refresh}
-        />
-      </main>
+        <main className="main-content">
+          {globalFeedback && (
+            <div
+              className="global-feedback"
+              onClick={() => setGlobalFeedback('')}
+              role="alert"
+            >
+              {globalFeedback}
+            </div>
+          )}
+
+          {heading && (
+            <div className="page-heading">
+              <h2>{heading.title}</h2>
+              <p>{heading.desc}</p>
+            </div>
+          )}
+
+          {(view === VIEWS.AVAILABLE || view === VIEWS.CHECKED_OUT) && (
+            <BookList
+              filter={view}
+              onSelect={setSelectedId}
+              onCheckIn={triggerRefresh}
+              onCheckOut={setCheckoutBook}
+              refresh={refresh}
+            />
+          )}
+
+          {view === VIEWS.ADD_BOOK && (
+            <AddBookForm
+              onDone={handleAddDone}
+              onCancel={() => setView(VIEWS.AVAILABLE)}
+            />
+          )}
+        </main>
+      </div>
 
       <footer className="app-footer">
-        Library Books, MERN Stack Capstone
+        City Library Management System, <span>CS3320 Capstone Project</span>. All rights reserved.
       </footer>
 
       {selectedId && (
@@ -76,13 +153,6 @@ export default function App() {
           book={checkoutBook}
           onClose={() => setCheckoutBook(null)}
           onDone={handleCheckoutDone}
-        />
-      )}
-
-      {showAddForm && (
-        <AddBookForm
-          onClose={() => setShowAddForm(false)}
-          onDone={handleAddDone}
         />
       )}
     </div>

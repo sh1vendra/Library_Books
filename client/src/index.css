@@ -1,49 +1,91 @@
-* {
+*, *::before, *::after {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
 }
 
+:root {
+  --navy:       #1a2744;
+  --navy-light: #243460;
+  --navy-dark:  #111c33;
+  --green:      #2d5016;
+  --green-hover:#3a6a1e;
+  --gold:       #c9a84c;
+  --gold-light: #e0c070;
+  --cream:      #f5f0e8;
+  --cream-dark: #ede6d8;
+  --white:      #ffffff;
+  --text-dark:  #1a1a1a;
+  --text-mid:   #4a4a4a;
+  --text-light: #7a7a7a;
+  --red:        #8b1a1a;
+  --red-light:  #fdf0f0;
+  --green-light:#f0f7eb;
+  --border:     #d6cfc0;
+  --shadow-sm:  0 1px 3px rgba(0,0,0,0.12);
+  --shadow-md:  0 4px 12px rgba(0,0,0,0.15);
+  --shadow-lg:  0 8px 32px rgba(0,0,0,0.2);
+}
+
+html, body {
+  height: 100%;
+}
+
 body {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background: #eef2f7;
-  color: #1a202c;
-  min-height: 100vh;
+  font-family: 'Segoe UI', Arial, sans-serif;
+  background: var(--cream);
+  color: var(--text-dark);
+  font-size: 15px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
 }
 
 #root {
   min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
-h1, h2, h3 {
-  font-weight: 600;
+h1, h2, h3, h4 {
+  font-family: Georgia, 'Times New Roman', serif;
+  line-height: 1.2;
 }
 
 button {
   cursor: pointer;
-  border: none;
-  border-radius: 6px;
-  padding: 8px 16px;
+  font-family: 'Segoe UI', Arial, sans-serif;
   font-size: 14px;
   font-weight: 500;
-  transition: background 0.2s, opacity 0.2s;
+  border: none;
+  border-radius: 5px;
+  padding: 9px 18px;
+  transition: background 0.18s, color 0.18s, box-shadow 0.18s;
 }
 
 button:disabled {
-  opacity: 0.5;
+  opacity: 0.55;
   cursor: not-allowed;
 }
 
-input, select {
-  border: 1px solid #cbd5e0;
-  border-radius: 6px;
-  padding: 8px 12px;
+input, select, textarea {
+  font-family: 'Segoe UI', Arial, sans-serif;
   font-size: 14px;
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  padding: 9px 12px;
   width: 100%;
+  background: var(--white);
+  color: var(--text-dark);
   outline: none;
-  transition: border-color 0.2s;
+  transition: border-color 0.18s, box-shadow 0.18s;
 }
 
-input:focus, select:focus {
-  border-color: #3182ce;
+input:focus, select:focus, textarea:focus {
+  border-color: var(--gold);
+  box-shadow: 0 0 0 3px rgba(201,168,76,0.18);
+}
+
+a {
+  color: var(--navy);
+  text-decoration: none;
 }
