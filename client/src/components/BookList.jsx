@@ -70,9 +70,9 @@ export default function BookList({ filter, onSelect, onCheckIn, onCheckOut, refr
             </tr>
           ) : (
             books.map(book => (
-              <tr key={book._id}>
+              <tr key={book.id}>
                 <td className="title-cell">
-                  <button className="title-link" onClick={() => onSelect(book._id)}>
+                  <button className="title-link" onClick={() => onSelect(book.id)}>
                     {book.title}
                   </button>
                 </td>
@@ -98,7 +98,7 @@ export default function BookList({ filter, onSelect, onCheckIn, onCheckOut, refr
                   ) : (
                     <button
                       className="btn-action btn-checkin"
-                      onClick={() => handleCheckIn(book._id, book.title)}
+                      onClick={() => handleCheckIn(book.id, book.title)}
                     >
                       Check In
                     </button>

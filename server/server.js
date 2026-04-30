@@ -4,7 +4,7 @@ const cors = require('cors');
 
 const app = express();
 const PORT = 4000;
-const MONGO_URI = 'mongodb+srv://shivendraus121_db_user:0wgyajjTknCtNBGd@cluster-library1.hrxnagd.mongodb.net/capstonelibrarydb?retryWrites=true&w=majority&appName=Cluster-Library1';
+const MONGO_URI = 'mongodb+srv://shivendraus121_db_user:x52VZQk47oN4iDoA@cluster0.oshybwt.mongodb.net/capstonelibrarydb?retryWrites=true&w=majority&appName=Cluster0';
 
 app.use(cors());
 app.use(express.json());
@@ -17,6 +17,16 @@ const bookSchema = new mongoose.Schema({
   avail:     { type: Boolean, default: true },
   who:       { type: String, default: '' },
   due:       { type: String, default: '' }
+}, {
+  toJSON: {
+    virtuals: true,
+    transform: (doc, ret) => {
+      ret.id = ret._id;
+      delete ret._id;
+      delete ret.__v;
+      return ret;
+    }
+  }
 });
 
 const Book = mongoose.model('Book', bookSchema);
@@ -57,7 +67,7 @@ mongoose.connect(MONGO_URI)
 
 app.get('/books', async (req, res) => {
   try {
-    const books = await Book.find({}, '_id title');
+    const books = await Book.find({}, 'title');
     res.json(books);
   } catch (err) {
     res.status(500).json({ error: err.message });

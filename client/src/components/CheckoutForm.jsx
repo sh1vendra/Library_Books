@@ -16,7 +16,7 @@ export default function CheckoutForm({ book, onClose, onDone }) {
     }
     setSubmitting(true);
     try {
-      const res = await fetch(API + '/books/checkout/' + book._id, {
+      const res = await fetch(API + '/books/checkout/' + book.id, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ who: who.trim(), due: due.trim() })
