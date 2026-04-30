@@ -1,10 +1,11 @@
+require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 
 const app = express();
-const PORT = 4000;
-const MONGO_URI = 'mongodb+srv://shivendraus121_db_user:x52VZQk47oN4iDoA@cluster0.oshybwt.mongodb.net/capstonelibrarydb?retryWrites=true&w=majority&appName=Cluster0';
+const PORT = process.env.PORT || 4000;
+const MONGO_URI = process.env.MONGO_URI;
 
 app.use(cors());
 app.use(express.json());
