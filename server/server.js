@@ -5,7 +5,7 @@ const cors = require('cors');
 
 const app = express();
 const PORT = process.env.PORT || 4000;
-const MONGO_URI = process.env.MONGO_URI;
+const MONGO_URI = 'mongodb+srv://shivendraus121_db_user:4fMQ0dDZMiNH9UZd@cluster0.oshybwt.mongodb.net/capstonelibrarydb?retryWrites=true&w=majority&appName=Cluster0';
 
 app.use(cors());
 app.use(express.json());
